@@ -48,9 +48,15 @@ readFile = (path) ->
     .filter((x) -> !!x)[0] || ''
 
   path: p
-  type: type dir
-  dir: dir
+  dest: ''
   file_path: path
+  relative_path: ''
+  type: type dir
+  name: ''
+  dir: dir
+  header: ''
+  footer: ''
+  marked: ''
   content: F.readFileSync(path).toString()
 
 updateHeader = (file_obj) ->
