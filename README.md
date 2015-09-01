@@ -16,5 +16,6 @@ see `rxjs.docset`
 
 ## :construction:
 
+* Apply highlight.js
 * [Table of Contents Support](https://kapeli.com/docsets#tableofcontents)
 * [Contribute a new docset](https://github.com/Kapeli/Dash-User-Contributions#contribute-a-new-docset)
