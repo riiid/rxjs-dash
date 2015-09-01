@@ -47,6 +47,7 @@ readFile = (path) ->
     .split P.sep
     .filter((x) -> !!x)[0] || ''
 
+  # file_obj
   path: p
   dest: ''
   file_path: path
@@ -111,6 +112,7 @@ file_source = Rx.Observable.fromNodeCallback(G)(DOC_GLOB)
     file_obj.dest = dest.replace /md$/g, 'html'
     file_obj
 
+# write to html file
 file_source
   .flatMap (file_obj) ->
     marked = "#{file_obj.header}#{file_obj.marked}#{file_obj.footer}"
@@ -147,7 +149,7 @@ Rx.Observable.fromPromise db.sync force: true
   , ((err) ->)
   , () -> console.log 'db updated'
 
-# copy dependencies
+# copy css dependencies
 Rx.Observable.fromArray [
   'bower_components/primer-css/css/primer.css',
   'bower_components/primer-markdown/dist/user-content.css'
