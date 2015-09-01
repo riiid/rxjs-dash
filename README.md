@@ -1,4 +1,4 @@
-# rxjs-dash :construction:
+# rxjs-dash
 
 Generate [RxJS](https://github.com/Reactive-Extensions/RxJS) docset for [dash](https://kapeli.com/dash)
 
@@ -13,3 +13,8 @@ $ npm start
 ```
 
 see `rxjs.docset`
+
+## :construction:
+
+* [Table of Contents Support](https://kapeli.com/docsets#tableofcontents)
+* [Contribute a new docset](https://github.com/Kapeli/Dash-User-Contributions#contribute-a-new-docset)
