@@ -1,0 +1,26 @@
+{
+  "name": "rxjs-dash",
+  "version": "0.0.1",
+  "description": "generate rxjs docset for dash",
+  "main": "docset.coffee",
+  "dependencies": {
+    "cheerio": "^0.19.0",
+    "fs-extra": "^0.24.0",
+    "glob": "^5.0.14",
+    "marked": "^0.3.5",
+    "rx": "^3.1.1",
+    "sequelize": "^3.6.0",
+    "sqlite3": "^3.0.10"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "npm install && coffee docset.coffee",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/riiid/rxjs-dash"
+  },
+  "author": "kyung yeol kim <kykim@riiid.co>",
+  "license": "MIT"
+}
