@@ -6,6 +6,7 @@ P  = require 'path'
 F  = require 'fs'
 C  = require 'cheerio'
 S  = require 'sequelize'
+H  = require 'highlight.js'
 T  = require './template'
 
 NAME = 'rxjs.docset'
@@ -39,7 +40,10 @@ searchIndex = db.define 'searchIndex',
   freezeTableName: true
   timestamps: false
 
-M.setOptions sanitize: false, gmf: true
+M.setOptions
+  sanitize: false
+  gmf: true
+  highlight: (code) -> H.highlightAuto(code).value
 
 readFile = (path) ->
   p   = path.replace "#{DOC_PATH}/", ''
@@ -151,6 +155,7 @@ Rx.Observable.fromPromise db.sync force: true
 
 # copy css dependencies
 Rx.Observable.fromArray [
+  'node_modules/highlight.js/styles/github.css',
   'bower_components/primer-css/css/primer.css',
   'bower_components/primer-markdown/dist/user-content.css'
 ]
