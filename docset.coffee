@@ -10,6 +10,8 @@ T  = require './template'
 
 NAME = 'rxjs.docset'
 
+GITHUB_DOC_PATH = 'https://github.com/Reactive-Extensions/RxJS/tree/master/doc/'
+
 RXJS_PATH = P.join __dirname, '.rxjs'
 DOC_PATH  = P.join RXJS_PATH, 'doc'
 DOC_GLOB  = P.join DOC_PATH, '**', '*.md'
@@ -51,16 +53,26 @@ readFile = (path) ->
   file_path: path
   content: F.readFileSync(path).toString()
 
-updateHeader = (header, relative_path) ->
+updateHeader = (file_obj) ->
+  header   = file_obj.header
+  rel_path = file_obj.relative_path
   header.replace /href="([^"]*)"/g, (match, p1) ->
-    "href=\"#{P.join relative_path, p1}\""
+    "href=\"#{P.join rel_path, p1}\""
 
-updateLink = (marked) ->
-  marked.replace /<a[^>]* href="[^"]*"/g, (match) ->
+updateLink = (file_obj) ->
+  marked   = file_obj.marked
+  rel_path = file_obj.relative_path
+  marked.replace /<a[^>]* href="([^"]*)"/g, (match, p1) ->
     unless /(^http|https)/.test match
       match.replace /md"$/g, 'html"'
     else
-      match
+      if ///#{GITHUB_DOC_PATH}///.test p1
+        link = p1
+          .replace ///#{GITHUB_DOC_PATH}///, ''
+          .replace /md$/g, 'html'
+        "<a href=\"#{P.join rel_path, link}\""
+      else
+        match
 
 type = (dir) ->
   switch dir
@@ -80,12 +92,12 @@ file_source = Rx.Observable.fromNodeCallback(G)(DOC_GLOB)
     file_obj
   .map (file_obj) ->
     # update css path
-    relative_path = P.relative P.dirname(file_obj.file_path), DOC_PATH
-    file_obj.header = updateHeader file_obj.header, relative_path
+    file_obj.relative_path = P.relative P.dirname(file_obj.file_path), DOC_PATH
+    file_obj.header = updateHeader file_obj
     file_obj
   .map (file_obj) ->
     # fix internal links
-    file_obj.marked = updateLink file_obj.marked
+    file_obj.marked = updateLink file_obj
     file_obj
   .map (file_obj) ->
     # update destination path
