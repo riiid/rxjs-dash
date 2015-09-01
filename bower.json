@@ -1,0 +1,11 @@
+{
+  "name": "rxjs-dash",
+  "version": "0.0.1",
+  "authors": [
+    "kyung yeol kim <kykim@riiid.co>"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "primer-css": "~2.3.3"
+  }
+}
