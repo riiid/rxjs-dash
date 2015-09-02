@@ -21,6 +21,10 @@ DOCSET_PATH = P.join __dirname, NAME
 DOCSET_RES  = P.join DOCSET_PATH, 'Contents', 'Resources'
 DOCSET_DOC  = P.join DOCSET_RES , 'Documents'
 
+RE_ANCHOR = /<a[^>]* href="([^"]*)"/g
+RE_HTTP   = /(^HTTP|HTTPS)/
+RE_GITHUB = ///#{GITHUB_DOC_PATH}///
+
 Fe.copySync 'resources', NAME
 
 db = new S 'database', 'username', 'password',
@@ -50,40 +54,48 @@ readFile = (path) ->
   dir = P.dirname p
     .split P.sep
     .filter((x) -> !!x)[0] || ''
+  dest = P.join DOCSET_DOC, path.replace DOC_PATH, ''
+    .replace /md$/g, 'html'
+  relative_path = P.relative P.dirname(path), DOC_PATH
 
   # file_obj
   path: p
-  dest: ''
+  dest: dest
   file_path: path
-  relative_path: ''
+  relative_path: relative_path
   type: type dir
   name: ''
   dir: dir
-  header: ''
-  footer: ''
+  header: T.header
+  footer: T.footer
   marked: ''
   content: F.readFileSync(path).toString()
 
+compileMarkdown = (file_obj) ->
+  file_obj.marked = M file_obj.content
+  file_obj
+
 updateHeader = (file_obj) ->
-  header   = file_obj.header
   rel_path = file_obj.relative_path
-  header.replace /href="([^"]*)"/g, (match, p1) ->
+  file_obj.header = file_obj.header.replace /href="([^"]*)"/g, (match, p1) ->
     "href=\"#{P.join rel_path, p1}\""
+  file_obj
 
 updateLink = (file_obj) ->
-  marked   = file_obj.marked
   rel_path = file_obj.relative_path
-  marked.replace /<a[^>]* href="([^"]*)"/g, (match, p1) ->
-    unless /(^http|https)/.test match
+
+  file_obj.marked = file_obj.marked.replace RE_ANCHOR, (match, p1) ->
+    unless RE_HTTP.test match
       match.replace /md"$/g, 'html"'
     else
-      if ///#{GITHUB_DOC_PATH}///.test p1
+      if RE_GITHUB.test p1
         link = p1
-          .replace ///#{GITHUB_DOC_PATH}///, ''
+          .replace RE_GITHUB, ''
           .replace /md$/g, 'html'
         "<a href=\"#{P.join rel_path, link}\""
       else
         match
+  file_obj
 
 type = (dir) ->
   switch dir
@@ -95,26 +107,9 @@ file_source = Rx.Observable.fromNodeCallback(G)(DOC_GLOB)
   .flatMap (files) -> Rx.Observable.fromArray files
   .map readFile
   .filter (file_obj) -> !!file_obj.content
-  .map (file_obj) ->
-    # add converted html
-    file_obj.header = T.header
-    file_obj.footer = T.footer
-    file_obj.marked = M file_obj.content
-    file_obj
-  .map (file_obj) ->
-    # update css path
-    file_obj.relative_path = P.relative P.dirname(file_obj.file_path), DOC_PATH
-    file_obj.header = updateHeader file_obj
-    file_obj
-  .map (file_obj) ->
-    # fix internal links
-    file_obj.marked = updateLink file_obj
-    file_obj
-  .map (file_obj) ->
-    # update destination path
-    dest = P.join DOCSET_DOC, file_obj.file_path.replace DOC_PATH, ''
-    file_obj.dest = dest.replace /md$/g, 'html'
-    file_obj
+  .map compileMarkdown
+  .map updateHeader
+  .map updateLink
 
 # write to html file
 file_source
