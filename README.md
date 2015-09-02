@@ -1,6 +1,6 @@
 # rxjs-dash
 
-Generate [RxJS](https://github.com/Reactive-Extensions/RxJS) docset for [dash](https://kapeli.com/dash)
+Generate [RxJS](https://github.com/Reactive-Extensions/RxJS) docset for [Dash](https://kapeli.com/dash)
 
 ## Generate docset
 
@@ -12,7 +12,7 @@ $ cd rxjs-dash
 $ npm start
 ```
 
-see `rxjs.docset`
+add `rxjs.docset` to `Dash`
 
 ## :construction:
 
