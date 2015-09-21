@@ -7,9 +7,11 @@ Generate [RxJS](https://github.com/Reactive-Extensions/RxJS) docset for [Dash](h
 Make sure you have `node`, `bower` on your system.
 
 ```
-$ git clone riiid/rxjs-dash --recursive
+$ git clone https://github.com/riiid/rxjs-dash.git --recursive
 $ cd rxjs-dash
 $ npm start
+$ mkdir ~/Library/Application\ Support/Dash/DocSets/RxJs
+$ mv rxjs.docset ~/Library/Application\ Support/Dash/DocSets/RxJs/
 ```
 
 add `rxjs.docset` to `Dash`
