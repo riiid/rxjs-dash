@@ -15,7 +15,7 @@
   },
   "devDependencies": {},
   "scripts": {
-    "preinstall": "bower install && cd .rxjs && git checkout v3.1.2 && cd ..",
+    "preinstall": "bower install && cd .rxjs && git checkout 44bc43 && cd ..",
     "start": "npm install && coffee docset.coffee",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
