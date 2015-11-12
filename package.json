@@ -4,7 +4,9 @@
   "description": "generate rxjs docset for dash",
   "main": "docset.coffee",
   "dependencies": {
+    "bower": "^1.6.5",
     "cheerio": "^0.19.0",
+    "coffee-script": "^1.10.0",
     "fs-extra": "^0.24.0",
     "glob": "^5.0.14",
     "highlight.js": "^8.7.0",
