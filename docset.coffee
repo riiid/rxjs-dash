@@ -25,6 +25,13 @@ RE_ANCHOR = /<a[^>]* href="([^"]*)"/g
 RE_HTTP   = /(^HTTP|HTTPS)/
 RE_GITHUB = ///#{GITHUB_DOC_PATH}///
 
+CSS_FILES = [
+  'node_modules/highlight.js/styles/github.css',
+  'node_modules/primer-css/css/primer.css',
+  'node_modules/primer-markdown/dist/user-content.css'
+]
+
+
 Fe.copySync 'resources', NAME
 
 db = new S 'database', 'username', 'password',
@@ -149,11 +156,7 @@ Rx.Observable.fromPromise db.sync force: true
   , () -> console.log 'db updated'
 
 # copy css dependencies
-Rx.Observable.fromArray [
-  'node_modules/highlight.js/styles/github.css',
-  'bower_components/primer-css/css/primer.css',
-  'bower_components/primer-markdown/dist/user-content.css'
-]
+Rx.Observable.fromArray CSS_FILES
   .flatMap (path) ->
     dest = P.join DOCSET_DOC, P.parse(path).base
     Rx.Observable.fromNodeCallback(Fe.copy)(path, dest)
